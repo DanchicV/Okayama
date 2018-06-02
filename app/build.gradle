@@ -12,10 +12,10 @@ android {
     }
     buildTypes {
         debug{
-            buildConfigField "String", "API_URL", "\"http://e91201g5.beget.tech/\""
+            buildConfigField "String", "API_URL", "\"http://g912017f.beget.tech/\""
         }
         release {
-            buildConfigField "String", "API_URL", "\"http://e91201g5.beget.tech/\""
+            buildConfigField "String", "API_URL", "\"http://g912017f.beget.tech/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

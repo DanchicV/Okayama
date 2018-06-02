@@ -3,19 +3,23 @@ package com.okayama.shop.ui.auth.registration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseFragment;
+import com.okayama.shop.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class RegistrationFragment extends BaseFragment implements RegistrationContract.View {
@@ -23,11 +27,48 @@ public class RegistrationFragment extends BaseFragment implements RegistrationCo
     @BindView(R.id.registration_progress)
     ProgressBar registrationProgress;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.name_edit_text)
+    EditText nameEditText;
+
+    @BindView(R.id.email_edit_text)
+    EditText emailEditText;
+
+    @BindView(R.id.city_edit_text)
+    EditText cityEditText;
+
+    @BindView(R.id.organization_edit_text)
+    EditText organizationEditText;
+
+    @BindView(R.id.password_edit_text)
+    EditText passwordEditText;
+
+    @BindView(R.id.retry_password_edit_text)
+    EditText retryPasswordEditText;
+
+    @BindView(R.id.confirm_button)
+    Button confirmButton;
+
+    @BindView(R.id.cancel_button)
+    Button cancelButton;
+
+    @BindView(R.id.registration_view_group)
+    LinearLayout registrationViewGroup;
+
+    @BindView(R.id.role_user_button)
+    Button roleUserButton;
+
+    @BindView(R.id.role_dealer_button)
+    Button roleDealerButton;
+
+    @BindView(R.id.select_role_view_group)
+    LinearLayout selectRoleViewGroup;
+
+    @BindView(R.id.header_view_group)
+    LinearLayout headerViewGroup;
 
     private Unbinder unbinder;
     private RegistrationPresenter presenter;
+    private int role;
 
     public static RegistrationFragment newInstance() {
         return new RegistrationFragment();
@@ -65,7 +106,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrationCo
 
     @Override
     public void showError(String message) {
-        if (isAdded()) {
+        if (isAdded() && checkValid()) {
             MaterialDialog materialDialog = new MaterialDialog.Builder(getContext())
                     .title(R.string.warning)
                     .content(message)
@@ -73,6 +114,11 @@ public class RegistrationFragment extends BaseFragment implements RegistrationCo
                     .show();
             materialDialog.getActionButton(DialogAction.POSITIVE).requestFocus();
         }
+    }
+
+    private boolean checkValid() {
+        // TODO: 28.05.2018 check
+        return true;
     }
 
     @Override
@@ -88,6 +134,47 @@ public class RegistrationFragment extends BaseFragment implements RegistrationCo
 
     @Override
     public void registrationSuccess() {
+        MainActivity.startNewTask(getContext());
+    }
 
+    private boolean isValidData() {
+        return true;
+    }
+
+    @OnClick(R.id.confirm_button)
+    public void onConfirmButtonClicked() {
+        if (isValidData()) {
+            presenter.registration(role,
+                    nameEditText.getText().toString(),
+                    passwordEditText.getText().toString(),
+                    emailEditText.getText().toString(),
+                    cityEditText.getText().toString(),
+                    organizationEditText.getText().toString());
+        }
+    }
+
+    @OnClick(R.id.cancel_button)
+    public void onCancelButtonClicked() {
+        selectRoleViewGroup.setVisibility(View.VISIBLE);
+        registrationViewGroup.setVisibility(View.GONE);
+        role = 0;
+    }
+
+    @OnClick(R.id.role_user_button)
+    public void onRoleUserButtonClicked() {
+        selectRoleViewGroup.setVisibility(View.GONE);
+        registrationViewGroup.setVisibility(View.VISIBLE);
+        cityEditText.setVisibility(View.GONE);
+        organizationEditText.setVisibility(View.GONE);
+        role = 1;
+    }
+
+    @OnClick(R.id.role_dealer_button)
+    public void onRoleDealerButtonClicked() {
+        selectRoleViewGroup.setVisibility(View.GONE);
+        registrationViewGroup.setVisibility(View.VISIBLE);
+        cityEditText.setVisibility(View.VISIBLE);
+        organizationEditText.setVisibility(View.VISIBLE);
+        role = 2;
     }
 }

@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_default_big"
-            android:background="@drawable/bg_button_default"
+            android:background="@drawable/bg_default"
             android:textSize="@dimen/default_text_size"
             android:text="@string/registration"/>
 
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_default"
-            android:background="@drawable/bg_button_default"
+            android:background="@drawable/bg_default"
             android:textSize="@dimen/default_text_size"
             android:text="@string/have_an_account"/>
 

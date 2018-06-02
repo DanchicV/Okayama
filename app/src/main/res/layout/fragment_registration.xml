@@ -1,44 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_girl"
-    android:gravity="center_horizontal">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_gravity="top"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_weight="1"
-            android:text="@string/registration"
-            android:textAllCaps="true"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_title"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_weight="1"
-            android:src="@drawable/logo" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/role_items_margin_bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:background="@drawable/background_girl">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/header_view_group"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_gravity="top"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:layout_weight="10"
+                    android:text="@string/registration"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_size_title"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:layout_weight="9"
+                    android:src="@drawable/logo" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/registration_view_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_default"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_default"
+                    android:hint="@string/hint_name"
+                    android:padding="@dimen/margin_default_small"
+                    android:textSize="@dimen/text_size_title" />
+
+                <EditText
+                    android:id="@+id/email_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_default"
+                    android:hint="@string/hint_email"
+                    android:padding="@dimen/margin_default_small"
+                    android:textSize="@dimen/text_size_title" />
+
+                <EditText
+                    android:id="@+id/city_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_default"
+                    android:hint="@string/hint_city"
+                    android:padding="@dimen/margin_default_small"
+                    android:textSize="@dimen/text_size_title" />
+
+                <EditText
+                    android:id="@+id/organization_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_default"
+                    android:hint="@string/hint_organization"
+                    android:padding="@dimen/margin_default_small"
+                    android:textSize="@dimen/text_size_title" />
+
+                <EditText
+                    android:id="@+id/password_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_default"
+                    android:hint="@string/hint_password"
+                    android:padding="@dimen/margin_default_small"
+                    android:textSize="@dimen/text_size_title" />
+
+                <EditText
+                    android:id="@+id/retry_password_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_default"
+                    android:hint="@string/hint_retry_password"
+                    android:padding="@dimen/margin_default_small"
+                    android:textSize="@dimen/text_size_title" />
+
+                <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_default"
+                    android:padding="@dimen/margin_default"
+                    android:text="@string/confirm" />
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/bg_cancel_default"
+                    android:padding="@dimen/margin_default_small"
+                    android:text="@string/cancel" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/select_role_view_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/role_items_margin_top"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/role_user_button"
@@ -75,5 +175,4 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
-
 </FrameLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseActivity;
+import com.okayama.shop.ui.auth.login.LoginFragment;
 import com.okayama.shop.ui.auth.registration.RegistrationFragment;
 
 import butterknife.ButterKnife;
@@ -34,13 +35,17 @@ public class AuthActivity extends BaseActivity {
     @OnClick(R.id.registration_button)
     public void onRegistrationButtonClicked() {
         getSupportFragmentManager().beginTransaction()
-                .add(RegistrationFragment.newInstance(), RegistrationFragment.class.getSimpleName())
+                .add(android.R.id.content, RegistrationFragment.newInstance(), RegistrationFragment.class.getSimpleName())
                 .addToBackStack(RegistrationFragment.class.getSimpleName())
                 .commit();
     }
 
     @OnClick(R.id.open_login_button)
     public void onOpenLoginButtonClicked() {
+        getSupportFragmentManager().beginTransaction()
+                .add(android.R.id.content, LoginFragment.newInstance(), RegistrationFragment.class.getSimpleName())
+                .addToBackStack(RegistrationFragment.class.getSimpleName())
+                .commit();
     }
 }
 

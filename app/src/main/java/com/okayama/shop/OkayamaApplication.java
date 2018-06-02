@@ -37,7 +37,7 @@ public class OkayamaApplication extends Application {
             preferenceHelper = new PreferenceHelper(OkayamaApplication.this);
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addNetworkInterceptor(new HeaderInterceptor())
+                    //.addNetworkInterceptor(new HeaderInterceptor())
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build();
             retrofit = new Retrofit.Builder()

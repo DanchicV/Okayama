@@ -9,13 +9,13 @@ import okhttp3.Response;
 public class HeaderInterceptor implements Interceptor {
 
     private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_JSON = "application/json";
+    private static final String MULTIPART_FROM_DATA = "multipart/form-data";
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request originalResponse = chain.request();
         Response response = chain.proceed(originalResponse.newBuilder()
-                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .header(CONTENT_TYPE, MULTIPART_FROM_DATA)
                 .build());
         return response;
     }

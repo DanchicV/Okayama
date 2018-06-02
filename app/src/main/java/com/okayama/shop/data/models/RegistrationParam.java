@@ -92,4 +92,14 @@ public class RegistrationParam {
     public void setOrganization(String organization) {
         this.organization = organization;
     }
+
+    @Override
+    public String toString() {
+        return "role:" + role +
+                "name:" + name +
+                "email:" + email +
+                "password:" + password +
+                "city:" + city +
+                "organization:" + organization;
+    }
 }

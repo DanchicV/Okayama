@@ -1,23 +1,22 @@
-package com.okayama.shop.ui.auth.registration;
+package com.okayama.shop.ui.auth.login;
 
 import android.support.annotation.NonNull;
 
 import com.okayama.shop.OkayamaApplication;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseRepository;
-import com.okayama.shop.data.models.RegistrationParam;
 import com.okayama.shop.data.repository.RepositoryImpl;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegistrationPresenter implements RegistrationContract.Presenter {
+public class LoginPresenter implements LoginContract.Presenter {
 
-    private RegistrationContract.View view;
+    private LoginContract.View view;
     private BaseRepository repository;
 
-    public void setView(RegistrationContract.View view) {
+    public void setView(LoginContract.View view) {
         this.view = view;
     }
 
@@ -27,37 +26,29 @@ public class RegistrationPresenter implements RegistrationContract.Presenter {
     }
 
     @Override
-    public void registration(final int role,
-                             final String name,
-                             final String password,
-                             final String email,
-                             final String city,
-                             final String organization) {
+    public void login(final String email, final String password) {
         view.showProgress(true);
-        repository.registration(role,
-                name,
-                password,
+        repository.login(
                 email,
-                city,
-                organization,
+                password,
                 new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         view.showProgress(false);
                         if (response.code() == 200) {
                             setAuthorized(true);
-                            view.registrationSuccess();
+                            view.loginSuccess();
                             return;
                         }
                         setAuthorized(false);
-                        view.showError(R.string.sign_in_error);
+                        view.showError(R.string.login_error);
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                        setAuthorized(false);
                         view.showProgress(false);
                         view.showError(R.string.unknown_error);
+                        setAuthorized(false);
                     }
                 });
     }
