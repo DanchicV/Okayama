@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Okayama</string>
+
+    <!-- Auth screen -->
+    <string name="registration">Регистрация</string>
+    <string name="login">Вход</string>
+    <string name="have_an_account">Есть учетная запись</string>
+    <string name="warning">Внимание</string>
+    <string name="sign_in_error">Ошибка регистрации</string>
+    <string name="login_error">Ошибка авторизации</string>
+    <string name="error_invalid_email">Неверный адрес электронной почты</string>
+    <string name="error_invalid_password">Этот пароль слишком короткий</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="error_incorrect_password">Неверный пароль</string>
+    <string name="passwords_do_not_match">Пароли не совпадают</string>
+    <string name="empty_passwords">Поле пароля не должно быть пустым</string>
+    <string name="error_field_required">Это поле является обязательным</string>
+    <string name="user">Пользователь</string>
+    <string name="dealer">Дилер</string>
+    <string name="hint_name">Ф.И.О.</string>
+    <string name="hint_email">Почта</string>
+    <string name="hint_city">Город</string>
+    <string name="hint_organization">Организация</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_retry_password">Повтрить пароль</string>
+    <string name="action_login">Войти</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="cancel">Отмена</string>
 </resources>
