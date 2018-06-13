@@ -127,12 +127,6 @@ public class RegistrationFragment extends BaseFragment implements RegistrationCo
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
     public void registrationSuccess() {
         MainActivity.startNewTask(getContext());
     }
@@ -176,5 +170,12 @@ public class RegistrationFragment extends BaseFragment implements RegistrationCo
         cityEditText.setVisibility(View.VISIBLE);
         organizationEditText.setVisibility(View.VISIBLE);
         role = 2;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+        presenter.unsubscribe();
     }
 }

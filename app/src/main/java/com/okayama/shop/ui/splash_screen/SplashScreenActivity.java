@@ -27,11 +27,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                         .getPreferenceHelper()
                         .isAuthorized();
                 if (isAuthorized) {
-                    MainActivity.start(SplashScreenActivity.this);
+                    MainActivity.startNewTask(SplashScreenActivity.this);
                 } else {
                     AuthActivity.startNewTask(SplashScreenActivity.this);
                 }
-                finish();
             }
         }, SPLASH_DELAY);
     }

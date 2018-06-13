@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.okayama.shop.OkayamaApplication;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseRepository;
-import com.okayama.shop.data.models.RegistrationParam;
 import com.okayama.shop.data.repository.RepositoryImpl;
 
 import retrofit2.Call;
