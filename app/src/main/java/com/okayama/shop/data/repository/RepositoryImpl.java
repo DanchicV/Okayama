@@ -3,6 +3,10 @@ package com.okayama.shop.data.repository;
 import com.okayama.shop.OkayamaApplication;
 import com.okayama.shop.base.BaseRepository;
 import com.okayama.shop.data.api.ApiService;
+import com.okayama.shop.data.models.Category;
+import com.okayama.shop.data.models.Product;
+
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -41,5 +45,15 @@ public class RepositoryImpl implements BaseRepository {
                 RequestBody.create(MediaType.parse("text/plain"), email),
                 RequestBody.create(MediaType.parse("text/plain"), password)
         ).enqueue(callback);
+    }
+
+    @Override
+    public void getCategories(Callback<List<Category>> callback) {
+        apiService.getCategories().enqueue(callback);
+    }
+
+    @Override
+    public void getProducts(long id, Callback<List<Product>> callback) {
+        apiService.getProducts(id).enqueue(callback);
     }
 }

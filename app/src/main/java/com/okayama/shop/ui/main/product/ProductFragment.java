@@ -1,48 +1,52 @@
-package com.okayama.shop.ui.auth.login;
+package com.okayama.shop.ui.main.product;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseFragment;
-import com.okayama.shop.ui.main.MainActivity;
+import com.okayama.shop.data.models.Product;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class LoginFragment extends BaseFragment implements LoginContract.View {
+public class ProductFragment extends BaseFragment implements ProductContract.View {
 
-    @BindView(R.id.email_edit_text)
-    EditText emailEditText;
-
-    @BindView(R.id.password_edit_text)
-    EditText passwordEditText;
-
-    @BindView(R.id.login_button)
-    Button loginButton;
-
-    @BindView(R.id.cancel_button)
-    Button cancelButton;
+    private static final String KEY_ID = "ID";
 
     @BindView(R.id.login_progress)
     ProgressBar loginProgress;
 
-    private Unbinder unbinder;
-    private LoginPresenter presenter;
+    @BindView(R.id.categories_recycler_view)
+    RecyclerView categoriesRecyclerView;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    @BindView(R.id.basket_fab)
+    ImageView basketFab;
+
+    private Unbinder unbinder;
+    private ProductPresenter presenter;
+    private ProductAdapter adapter = new ProductAdapter();
+
+    public static ProductFragment newInstance(long id) {
+        ProductFragment productFragment = new ProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong(KEY_ID, id);
+        productFragment.setArguments(bundle);
+        return productFragment;
     }
 
     @Override
@@ -55,10 +59,10 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_categories, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        presenter = new LoginPresenter();
+        presenter = new ProductPresenter();
         presenter.setView(this);
         presenter.subscribe();
         setHasOptionsMenu(true);
@@ -66,8 +70,23 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     }
 
     @Override
-    public void setPresenter(LoginPresenter presenter) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        categoriesRecyclerView.setLayoutManager(linearLayoutManager);
+        categoriesRecyclerView.setAdapter(adapter);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            long id = arguments.getLong(KEY_ID);
+            presenter.loadProducts(id);
+        }
+    }
+
+    @Override
+    public void setPresenter(ProductPresenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -92,29 +111,10 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
         showError(getString(message));
     }
 
-    private boolean isValidData() {
-        // TODO: 28.05.2018 check
-        return true;
-    }
-
-    @OnClick(R.id.login_button)
-    public void onOpenLoginButtonClicked() {
-        if (isValidData()) {
-            presenter.login(emailEditText.getText().toString(),
-                    passwordEditText.getText().toString());
-        }
-    }
-
-    @OnClick(R.id.cancel_button)
-    public void onCancelButtonClicked() {
-        if (isAdded()) {
-            getActivity().onBackPressed();
-        }
-    }
-
     @Override
-    public void loginSuccess() {
-        MainActivity.startNewTask(getContext());
+    public void setData(List<Product> products) {
+        adapter.setProducts(products);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -122,5 +122,9 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
         super.onDestroyView();
         unbinder.unbind();
         presenter.unsubscribe();
+    }
+
+    @OnClick(R.id.basket_fab)
+    public void onViewClicked() {
     }
 }

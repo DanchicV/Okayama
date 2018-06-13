@@ -8,6 +8,7 @@
     <string name="warning">Внимание</string>
     <string name="sign_in_error">Ошибка регистрации</string>
     <string name="login_error">Ошибка авторизации</string>
+    <string name="loading_error">Ошибка загрузки данных</string>
     <string name="error_invalid_email">Неверный адрес электронной почты</string>
     <string name="error_invalid_password">Этот пароль слишком короткий</string>
     <string name="unknown_error">Неизвестная ошибка</string>
