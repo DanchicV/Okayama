@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/margin_default"
         android:layout_marginTop="@dimen/margin_default"
         android:scaleType="fitEnd"
-        android:src="@drawable/ic_basket" />
+        android:src="@drawable/ic_basket_empty" />
 
     <ImageView
         android:id="@+id/back_button"

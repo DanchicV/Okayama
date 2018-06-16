@@ -1,13 +1,17 @@
 package com.okayama.shop.data.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Product implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     long id;
@@ -27,6 +31,8 @@ public class Product implements Parcelable {
     @SerializedName("description")
     @Expose
     String description;
+
+    int count;
 
     public long getId() {
         return id;
@@ -68,6 +74,17 @@ public class Product implements Parcelable {
         this.description = description;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Product() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -80,9 +97,7 @@ public class Product implements Parcelable {
         dest.writeFloat(this.amount);
         dest.writeString(this.image);
         dest.writeString(this.description);
-    }
-
-    public Product() {
+        dest.writeInt(this.count);
     }
 
     protected Product(Parcel in) {
@@ -91,9 +106,10 @@ public class Product implements Parcelable {
         this.amount = in.readFloat();
         this.image = in.readString();
         this.description = in.readString();
+        this.count = in.readInt();
     }
 
-    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
         @Override
         public Product createFromParcel(Parcel source) {
             return new Product(source);

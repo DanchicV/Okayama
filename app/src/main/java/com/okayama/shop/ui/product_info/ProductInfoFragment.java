@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -46,8 +47,12 @@ public class ProductInfoFragment extends BaseFragment implements ProductInfoCont
     @BindView(R.id.count_edit_text)
     EditText countEditText;
 
+    @BindView(R.id.basket_fab)
+    ImageView basketFab;
+
     private Unbinder unbinder;
     private ProductInfoPresenter presenter;
+    private Product product;
 
     public static ProductInfoFragment newInstance(Product product) {
         ProductInfoFragment productInfoFragment = new ProductInfoFragment();
@@ -55,11 +60,6 @@ public class ProductInfoFragment extends BaseFragment implements ProductInfoCont
         bundle.putParcelable(KEY_PRODUCT, product);
         productInfoFragment.setArguments(bundle);
         return productInfoFragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -83,8 +83,8 @@ public class ProductInfoFragment extends BaseFragment implements ProductInfoCont
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            Product product = arguments.getParcelable(KEY_PRODUCT);
-            setData(product);
+            product = arguments.getParcelable(KEY_PRODUCT);
+            setData();
         }
     }
 
@@ -115,12 +115,21 @@ public class ProductInfoFragment extends BaseFragment implements ProductInfoCont
         showError(getString(message));
     }
 
-    public void setData(Product product) {
+    public void setData() {
         titleTextView.setText(product.getName());
         descriptionTextView.setText(product.getDescription());
         priceTextView.setText(String.valueOf(product.getAmount()));
         if (!TextUtils.isEmpty(product.getImage())) {
             Picasso.get().load(product.getImage()).into(productImage);
+        }
+        updateBasketFab(productDao.getAllProduct().isEmpty());
+    }
+
+    private void updateBasketFab(boolean isEmpty) {
+        if (isEmpty) {
+            basketFab.setImageResource(R.drawable.ic_basket_empty);
+        } else {
+            basketFab.setImageResource(R.drawable.ic_basket_not_empty);
         }
     }
 
@@ -148,5 +157,12 @@ public class ProductInfoFragment extends BaseFragment implements ProductInfoCont
 
     @OnClick(R.id.add_button)
     public void onAddButtonClicked() {
+        String count = countEditText.getText().toString();
+        if (!TextUtils.isEmpty(count)) {
+            product.setCount(Integer.parseInt(count));
+            productDao.insert(product);
+            Toast.makeText(getContext(), "Товар добавлен в корзину", Toast.LENGTH_SHORT).show();
+            updateBasketFab(false);
+        }
     }
 }

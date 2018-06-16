@@ -37,6 +37,9 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
     @BindView(R.id.basket_fab)
     ImageView basketFab;
 
+    @BindView(R.id.back_button)
+    ImageView backButton;
+
     private Unbinder unbinder;
     private CategoriesPresenter presenter;
     private CategoriesAdapter adapter;
@@ -69,6 +72,9 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        updateBasketFab(productDao.getAllProduct().isEmpty());
+        backButton.setVisibility(View.GONE);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -87,6 +93,14 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
         categoriesRecyclerView.setAdapter(adapter);
 
         presenter.loadCategories();
+    }
+
+    private void updateBasketFab(boolean isEmpty) {
+        if (isEmpty) {
+            basketFab.setImageResource(R.drawable.ic_basket_empty);
+        } else {
+            basketFab.setImageResource(R.drawable.ic_basket_not_empty);
+        }
     }
 
     @Override

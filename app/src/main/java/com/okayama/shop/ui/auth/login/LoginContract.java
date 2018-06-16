@@ -13,7 +13,5 @@ public class LoginContract {
     public interface Presenter extends BasePresenter {
 
         void login(final String email,final String password);
-
-        void setAuthorized(boolean isAuthorized);
     }
 }

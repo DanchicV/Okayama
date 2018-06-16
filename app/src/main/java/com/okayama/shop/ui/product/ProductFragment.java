@@ -39,6 +39,9 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     @BindView(R.id.basket_fab)
     ImageView basketFab;
 
+    @BindView(R.id.back_button)
+    ImageView backButton;
+
     private Unbinder unbinder;
     private ProductPresenter presenter;
     private ProductAdapter adapter;
@@ -76,6 +79,9 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        updateBasketFab(productDao.getAllProduct().isEmpty());
+        backButton.setVisibility(View.VISIBLE);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -102,6 +108,14 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
         if (arguments != null) {
             long id = arguments.getLong(KEY_ID);
             presenter.loadProducts(id);
+        }
+    }
+
+    private void updateBasketFab(boolean isEmpty) {
+        if (isEmpty) {
+            basketFab.setImageResource(R.drawable.ic_basket_empty);
+        } else {
+            basketFab.setImageResource(R.drawable.ic_basket_not_empty);
         }
     }
 
@@ -147,6 +161,13 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     }
 
     @OnClick(R.id.basket_fab)
-    public void onViewClicked() {
+    public void onBasketFabClicked() {
+    }
+
+    @OnClick(R.id.back_button)
+    public void onBackButtonClicked() {
+        if (isAdded()) {
+            getActivity().onBackPressed();
+        }
     }
 }

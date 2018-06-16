@@ -37,6 +37,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                         view.showProgress(false);
                         if (response.code() == 200) {
                             setAuthorized(true);
+                            saveEmail(email);
                             view.loginSuccess();
                             return;
                         }
@@ -53,12 +54,18 @@ public class LoginPresenter implements LoginContract.Presenter {
                 });
     }
 
-    @Override
-    public void setAuthorized(boolean isAuthorized) {
+    private void setAuthorized(boolean isAuthorized) {
         OkayamaApplication
                 .getComponent()
                 .getPreferenceHelper()
                 .setAuthorized(isAuthorized);
+    }
+
+    private void saveEmail(String email) {
+        OkayamaApplication
+                .getComponent()
+                .getPreferenceHelper()
+                .setEmail(email);
     }
 
     @Override
