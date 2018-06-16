@@ -27,4 +27,8 @@
     <string name="action_login">Войти</string>
     <string name="confirm">Подтвердить</string>
     <string name="cancel">Отмена</string>
+
+    <string name="add">Добавить</string>
+    <string name="count">Кол-во: </string>
+    <string name="default_count">1</string>
 </resources>

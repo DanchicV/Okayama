@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.categories;
+package com.okayama.shop.ui.categories;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +17,7 @@ import com.okayama.shop.R;
 import com.okayama.shop.base.BaseFragment;
 import com.okayama.shop.base.ItemClickListener;
 import com.okayama.shop.data.models.Category;
-import com.okayama.shop.ui.main.product.ProductFragment;
+import com.okayama.shop.ui.product.ProductFragment;
 
 import java.util.List;
 
@@ -78,7 +78,8 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
                 if (CategoriesFragment.this.isAdded()) {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .add(android.R.id.content, ProductFragment.newInstance(id), CategoriesFragment.class.getSimpleName())
+                            .add(android.R.id.content, ProductFragment.newInstance(id), ProductFragment.class.getSimpleName())
+                            .addToBackStack(ProductFragment.class.getSimpleName())
                             .commit();
                 }
             }

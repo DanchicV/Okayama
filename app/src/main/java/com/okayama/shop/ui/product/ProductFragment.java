@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.product;
+package com.okayama.shop.ui.product;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +15,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseFragment;
+import com.okayama.shop.base.ItemClickListener;
 import com.okayama.shop.data.models.Product;
+import com.okayama.shop.ui.product_info.ProductInfoFragment;
 
 import java.util.List;
 
@@ -39,7 +41,8 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
 
     private Unbinder unbinder;
     private ProductPresenter presenter;
-    private ProductAdapter adapter = new ProductAdapter();
+    private ProductAdapter adapter;
+    private List<Product> products;
 
     public static ProductFragment newInstance(long id) {
         ProductFragment productFragment = new ProductFragment();
@@ -75,6 +78,24 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new ProductAdapter(new ItemClickListener() {
+            @Override
+            public void onClick(long id) {
+                if (ProductFragment.this.isAdded()) {
+                    for (Product product : products) {
+                        if (product.getId() == id) {
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .add(android.R.id.content, ProductInfoFragment.newInstance(product), ProductInfoFragment.class.getSimpleName())
+                                    .addToBackStack(ProductInfoFragment.class.getSimpleName())
+                                    .commit();
+                            break;
+                        }
+                    }
+                }
+            }
+        });
         categoriesRecyclerView.setAdapter(adapter);
 
         Bundle arguments = getArguments();
@@ -113,6 +134,7 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
 
     @Override
     public void setData(List<Product> products) {
+        this.products = products;
         adapter.setProducts(products);
         adapter.notifyDataSetChanged();
     }

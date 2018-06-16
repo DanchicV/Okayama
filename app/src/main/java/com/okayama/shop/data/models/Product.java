@@ -1,13 +1,16 @@
 package com.okayama.shop.data.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("id")
     @Expose
-    String id;
+    long id;
 
     @SerializedName("name")
     @Expose
@@ -25,11 +28,11 @@ public class Product {
     @Expose
     String description;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -64,4 +67,41 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.name);
+        dest.writeFloat(this.amount);
+        dest.writeString(this.image);
+        dest.writeString(this.description);
+    }
+
+    public Product() {
+    }
+
+    protected Product(Parcel in) {
+        this.id = in.readLong();
+        this.name = in.readString();
+        this.amount = in.readFloat();
+        this.image = in.readString();
+        this.description = in.readString();
+    }
+
+    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.product;
+package com.okayama.shop.ui.product;
 
 import com.okayama.shop.base.BasePresenter;
 import com.okayama.shop.base.BaseView;
