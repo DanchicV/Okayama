@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.okayama.shop.ui.main.categories.CategoriesFragment;
+import com.okayama.shop.ui.categories.CategoriesFragment;
 
 public class MainActivity extends AppCompatActivity {
 

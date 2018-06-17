@@ -3,9 +3,13 @@ package com.okayama.shop.data.repository;
 import com.okayama.shop.OkayamaApplication;
 import com.okayama.shop.base.BaseRepository;
 import com.okayama.shop.data.api.ApiService;
+import com.okayama.shop.data.dao.ProductDao;
 import com.okayama.shop.data.models.Category;
+import com.okayama.shop.data.models.OrderElement;
 import com.okayama.shop.data.models.Product;
+import com.okayama.shop.util.PreferenceHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -15,9 +19,14 @@ import retrofit2.Callback;
 public class RepositoryImpl implements BaseRepository {
 
     private ApiService apiService;
+    private ProductDao productDao;
+    private PreferenceHelper preferenceHelper;
 
     public RepositoryImpl() {
-        this.apiService = OkayamaApplication.getComponent().getApiService();
+        OkayamaApplication.AppComponent appComponent = OkayamaApplication.getComponent();
+        this.apiService = appComponent.getApiService();
+        productDao = appComponent.getDatabase().getProductDao();
+        preferenceHelper = appComponent.getPreferenceHelper();
     }
 
     @Override
@@ -55,5 +64,26 @@ public class RepositoryImpl implements BaseRepository {
     @Override
     public void getProducts(long id, Callback<List<Product>> callback) {
         apiService.getProducts(id).enqueue(callback);
+    }
+
+    @Override
+    public void createOrder(Callback<Void> callback) {
+        String email = preferenceHelper.getEmail();
+        String phone = preferenceHelper.getPhone();
+        List<Product> products = productDao.getAllProduct();
+        List<OrderElement> elements = new ArrayList<>();
+        for (Product product : products) {
+            elements.add(new OrderElement(product.getId(), product.getCount()));
+        }
+        apiService.createOrder(
+                RequestBody.create(MediaType.parse("text/plain"), email),
+                RequestBody.create(MediaType.parse("text/plain"), phone),
+                elements
+        ).enqueue(callback);
+    }
+
+    @Override
+    public List<Product> getBasket() {
+        return productDao.getAllProduct();
     }
 }

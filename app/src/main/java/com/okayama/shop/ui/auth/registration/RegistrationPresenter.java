@@ -45,6 +45,7 @@ public class RegistrationPresenter implements RegistrationContract.Presenter {
                         view.showProgress(false);
                         if (response.code() == 200) {
                             setAuthorized(true);
+                            saveEmail(email);
                             view.registrationSuccess();
                             return;
                         }
@@ -67,6 +68,13 @@ public class RegistrationPresenter implements RegistrationContract.Presenter {
                 .getComponent()
                 .getPreferenceHelper()
                 .setAuthorized(isAuthorized);
+    }
+
+    private void saveEmail(String email) {
+        OkayamaApplication
+                .getComponent()
+                .getPreferenceHelper()
+                .setEmail(email);
     }
 
     @Override

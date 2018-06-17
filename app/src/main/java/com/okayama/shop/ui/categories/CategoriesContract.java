@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.categories;
+package com.okayama.shop.ui.categories;
 
 import com.okayama.shop.base.BasePresenter;
 import com.okayama.shop.base.BaseView;
@@ -16,5 +16,7 @@ public class CategoriesContract {
     public interface Presenter extends BasePresenter {
 
         void loadCategories();
+
+        void logout();
     }
 }

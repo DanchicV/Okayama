@@ -22,4 +22,8 @@ public interface BaseRepository {
     void getCategories(Callback<List<Category>> callback);
 
     void getProducts(long id, Callback<List<Product>> callback);
+
+    void createOrder(Callback<Void> callback);
+
+    List<Product> getBasket();
 }

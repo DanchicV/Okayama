@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.product;
+package com.okayama.shop.ui.product;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.okayama.shop.R;
+import com.okayama.shop.base.ItemClickListener;
 import com.okayama.shop.data.models.Product;
 
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ import butterknife.ButterKnife;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private List<Product> products = new ArrayList<>();
+    private ItemClickListener itemClickListener;
+
+    public ProductAdapter(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
     @NonNull
     @Override
@@ -30,7 +36,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.onBind(products.get(position).getName());
+        holder.onBind(products.get(position), itemClickListener);
     }
 
     public void setProducts(List<Product> products) {
@@ -52,8 +58,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             ButterKnife.bind(this, view);
         }
 
-        private void onBind(String name) {
-            categoryNameTextView.setText(name);
+        private void onBind(final Product product, final ItemClickListener itemClickListener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(product.getId());
+                }
+            });
+            categoryNameTextView.setText(product.getName());
         }
     }
 }

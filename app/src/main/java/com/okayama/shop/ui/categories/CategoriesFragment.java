@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.product;
+package com.okayama.shop.ui.categories;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +15,10 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseFragment;
-import com.okayama.shop.data.models.Product;
+import com.okayama.shop.base.ItemClickListener;
+import com.okayama.shop.data.models.Category;
+import com.okayama.shop.ui.auth.AuthActivity;
+import com.okayama.shop.ui.product.ProductFragment;
 
 import java.util.List;
 
@@ -24,9 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class ProductFragment extends BaseFragment implements ProductContract.View {
-
-    private static final String KEY_ID = "ID";
+public class CategoriesFragment extends BaseFragment implements CategoriesContract.View {
 
     @BindView(R.id.login_progress)
     ProgressBar loginProgress;
@@ -37,21 +38,15 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     @BindView(R.id.basket_fab)
     ImageView basketFab;
 
+    @BindView(R.id.logout_button)
+    ImageView logoutButton;
+
     private Unbinder unbinder;
-    private ProductPresenter presenter;
-    private ProductAdapter adapter = new ProductAdapter();
+    private CategoriesPresenter presenter;
+    private CategoriesAdapter adapter;
 
-    public static ProductFragment newInstance(long id) {
-        ProductFragment productFragment = new ProductFragment();
-        Bundle bundle = new Bundle();
-        bundle.putLong(KEY_ID, id);
-        productFragment.setArguments(bundle);
-        return productFragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static CategoriesFragment newInstance() {
+        return new CategoriesFragment();
     }
 
     @Nullable
@@ -62,7 +57,7 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        presenter = new ProductPresenter();
+        presenter = new CategoriesPresenter();
         presenter.setView(this);
         presenter.subscribe();
         setHasOptionsMenu(true);
@@ -73,19 +68,38 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        updateBasketFab(productDao.getAllProduct().isEmpty());
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new CategoriesAdapter(new ItemClickListener() {
+            @Override
+            public void onClick(long id) {
+                if (CategoriesFragment.this.isAdded()) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(android.R.id.content, ProductFragment.newInstance(id), ProductFragment.class.getSimpleName())
+                            .addToBackStack(ProductFragment.class.getSimpleName())
+                            .commit();
+                }
+            }
+        });
         categoriesRecyclerView.setAdapter(adapter);
 
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            long id = arguments.getLong(KEY_ID);
-            presenter.loadProducts(id);
+        presenter.loadCategories();
+    }
+
+    private void updateBasketFab(boolean isEmpty) {
+        if (isEmpty) {
+            basketFab.setImageResource(R.drawable.ic_basket_empty);
+        } else {
+            basketFab.setImageResource(R.drawable.ic_basket_not_empty);
         }
     }
 
     @Override
-    public void setPresenter(ProductPresenter presenter) {
+    public void setPresenter(CategoriesPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -112,8 +126,8 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     }
 
     @Override
-    public void setData(List<Product> products) {
-        adapter.setProducts(products);
+    public void setData(List<Category> categories) {
+        adapter.setCategories(categories);
         adapter.notifyDataSetChanged();
     }
 
@@ -125,6 +139,15 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     }
 
     @OnClick(R.id.basket_fab)
-    public void onViewClicked() {
+    protected void onBasketClicked() {
+        super.onBasketClicked();
+    }
+
+    @OnClick(R.id.logout_button)
+    public void onLogoutClicked() {
+        presenter.logout();
+        if (CategoriesFragment.this.isAdded()) {
+            AuthActivity.startNewTask(getContext());
+        }
     }
 }

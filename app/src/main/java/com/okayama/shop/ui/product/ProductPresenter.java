@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.product;
+package com.okayama.shop.ui.product;
 
 import android.support.annotation.NonNull;
 

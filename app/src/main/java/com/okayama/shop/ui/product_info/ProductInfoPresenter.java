@@ -1,10 +1,10 @@
-package com.okayama.shop.ui.main.categories;
+package com.okayama.shop.ui.product_info;
 
 import android.support.annotation.NonNull;
 
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseRepository;
-import com.okayama.shop.data.models.Category;
+import com.okayama.shop.data.models.Product;
 import com.okayama.shop.data.repository.RepositoryImpl;
 
 import java.util.List;
@@ -13,12 +13,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoriesPresenter implements CategoriesContract.Presenter {
+public class ProductInfoPresenter implements ProductInfoContract.Presenter {
 
-    private CategoriesContract.View view;
+    private ProductInfoContract.View view;
     private BaseRepository repository;
 
-    public void setView(CategoriesContract.View view) {
+    public void setView(ProductInfoContract.View view) {
         this.view = view;
     }
 
@@ -28,26 +28,25 @@ public class CategoriesPresenter implements CategoriesContract.Presenter {
     }
 
     @Override
-    public void loadCategories() {
+    public void loadProducts(long id) {
         view.showProgress(true);
-        repository.getCategories(new Callback<List<Category>>() {
+        repository.getProducts(id, new Callback<List<Product>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Category>> call,
-                                   @NonNull Response<List<Category>> response) {
+            public void onResponse(@NonNull Call<List<Product>> call,
+                                   @NonNull Response<List<Product>> response) {
                 view.showProgress(false);
                 if (response.code() == 200) {
-                    view.setData(response.body());
+
                     return;
                 }
                 view.showError(R.string.loading_error);
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Category>> call,
+            public void onFailure(@NonNull Call<List<Product>> call,
                                   @NonNull Throwable t) {
                 view.showProgress(false);
                 view.showError(R.string.unknown_error);
-
             }
         });
     }

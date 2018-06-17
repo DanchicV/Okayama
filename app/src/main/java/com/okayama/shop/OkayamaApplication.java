@@ -1,9 +1,10 @@
 package com.okayama.shop;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 
 import com.okayama.shop.data.api.ApiService;
-import com.okayama.shop.data.api.HeaderInterceptor;
+import com.okayama.shop.data.dao.AppDatabase;
 import com.okayama.shop.util.PreferenceHelper;
 
 import okhttp3.OkHttpClient;
@@ -14,6 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OkayamaApplication extends Application {
 
     private static AppComponent appComponent;
+
+    private AppDatabase database;
 
     @Override
     public void onCreate() {
@@ -36,6 +39,13 @@ public class OkayamaApplication extends Application {
         private AppComponent() {
             preferenceHelper = new PreferenceHelper(OkayamaApplication.this);
 
+            database = Room.databaseBuilder(getApplicationContext(),
+                    AppDatabase.class,
+                    "Product-database")
+                    .allowMainThreadQueries()
+                    .build();
+
+
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     //.addNetworkInterceptor(new HeaderInterceptor())
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -54,6 +64,10 @@ public class OkayamaApplication extends Application {
 
         public PreferenceHelper getPreferenceHelper() {
             return preferenceHelper;
+        }
+
+        public AppDatabase getDatabase() {
+            return database;
         }
     }
 }

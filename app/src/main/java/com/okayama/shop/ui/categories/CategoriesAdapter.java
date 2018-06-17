@@ -1,4 +1,4 @@
-package com.okayama.shop.ui.main.categories;
+package com.okayama.shop.ui.categories;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
