@@ -36,6 +36,18 @@ public class PreferenceHelper {
         return preferences.getString(KEY_EMAIL, null);
     }
 
+    public void setPhone(String phone) {
+        if (!TextUtils.isEmpty(phone)) {
+            putString(KEY_PHONE, phone);
+        } else {
+            remove(KEY_PHONE);
+        }
+    }
+
+    public String getPhone() {
+        return preferences.getString(KEY_PHONE, null);
+    }
+
     private void putString(String key, String value) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);

@@ -141,11 +141,8 @@ public class ProductInfoFragment extends BaseFragment implements ProductInfoCont
     }
 
     @OnClick(R.id.basket_fab)
-    public void onViewClicked() {
-    }
-
-    @OnClick(R.id.basket_fab)
-    public void onBasketFabClicked() {
+    protected void onBasketClicked() {
+        super.onBasketClicked();
     }
 
     @OnClick(R.id.back_button)

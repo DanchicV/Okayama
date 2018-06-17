@@ -1,13 +1,15 @@
-package com.okayama.shop.ui.categories;
+package com.okayama.shop.ui.basket;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -16,37 +18,33 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseFragment;
 import com.okayama.shop.base.ItemClickListener;
-import com.okayama.shop.data.models.Category;
-import com.okayama.shop.ui.auth.AuthActivity;
 import com.okayama.shop.ui.product.ProductFragment;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class CategoriesFragment extends BaseFragment implements CategoriesContract.View {
+public class BasketFragment extends BaseFragment implements BasketContract.View {
 
-    @BindView(R.id.login_progress)
-    ProgressBar loginProgress;
+    @BindView(R.id.progress)
+    ProgressBar progress;
 
-    @BindView(R.id.categories_recycler_view)
-    RecyclerView categoriesRecyclerView;
+    @BindView(R.id.basket_recycler_view)
+    RecyclerView basketRecyclerView;
 
-    @BindView(R.id.basket_fab)
-    ImageView basketFab;
+    @BindView(R.id.buy_button)
+    Button buyButton;
 
-    @BindView(R.id.logout_button)
-    ImageView logoutButton;
+    @BindView(R.id.back_button)
+    ImageView backButton;
 
     private Unbinder unbinder;
-    private CategoriesPresenter presenter;
-    private CategoriesAdapter adapter;
+    private BasketPresenter presenter;
+    private BasketAdapter adapter;
 
-    public static CategoriesFragment newInstance() {
-        return new CategoriesFragment();
+    public static BasketFragment newInstance() {
+        return new BasketFragment();
     }
 
     @Nullable
@@ -54,10 +52,10 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_basket, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        presenter = new CategoriesPresenter();
+        presenter = new BasketPresenter();
         presenter.setView(this);
         presenter.subscribe();
         setHasOptionsMenu(true);
@@ -68,44 +66,35 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        updateBasketFab(productDao.getAllProduct().isEmpty());
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        categoriesRecyclerView.setLayoutManager(linearLayoutManager);
+        basketRecyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new CategoriesAdapter(new ItemClickListener() {
+        adapter = new BasketAdapter(new ItemClickListener() {
             @Override
             public void onClick(long id) {
-                if (CategoriesFragment.this.isAdded()) {
+                if (BasketFragment.this.isAdded()) {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(android.R.id.content, ProductFragment.newInstance(id), ProductFragment.class.getSimpleName())
+                            .add(android.R.id.content, ProductFragment.newInstance(id), ProductFragment.class.getSimpleName())
                             .addToBackStack(ProductFragment.class.getSimpleName())
                             .commit();
                 }
             }
         });
-        categoriesRecyclerView.setAdapter(adapter);
 
-        presenter.loadCategories();
+        adapter.setProducts(presenter.getBasket());
+        basketRecyclerView.setAdapter(adapter);
     }
 
-    private void updateBasketFab(boolean isEmpty) {
-        if (isEmpty) {
-            basketFab.setImageResource(R.drawable.ic_basket_empty);
-        } else {
-            basketFab.setImageResource(R.drawable.ic_basket_not_empty);
-        }
-    }
 
     @Override
-    public void setPresenter(CategoriesPresenter presenter) {
+    public void setPresenter(BasketPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
     public void showProgress(Boolean b) {
-        loginProgress.setVisibility(b ? View.VISIBLE : View.GONE);
+        progress.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -126,28 +115,28 @@ public class CategoriesFragment extends BaseFragment implements CategoriesContra
     }
 
     @Override
-    public void setData(List<Category> categories) {
-        adapter.setCategories(categories);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
         presenter.unsubscribe();
     }
 
-    @OnClick(R.id.basket_fab)
-    protected void onBasketClicked() {
-        super.onBasketClicked();
+    @OnClick(R.id.back_button)
+    public void onBackButtonClicked() {
+        if (isAdded()) {
+            getActivity().onBackPressed();
+        }
     }
 
-    @OnClick(R.id.logout_button)
-    public void onLogoutClicked() {
-        presenter.logout();
-        if (CategoriesFragment.this.isAdded()) {
-            AuthActivity.startNewTask(getContext());
-        }
+    @OnClick(R.id.buy_button)
+    public void onBuyClicked() {
+        BasketDialogFragment.newInstance(new BasketDialogFragment.PhoneConfirmListener() {
+            @Override
+            public void phoneConfirm(String phone) {
+                if (!TextUtils.isEmpty(phone)) {
+                    presenter.sendBasket(phone);
+                }
+            }
+        }, presenter.getPhone()).show(getFragmentManager(), BasketDialogFragment.class.getSimpleName());
     }
 }

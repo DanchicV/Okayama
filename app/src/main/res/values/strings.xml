@@ -20,6 +20,7 @@
     <string name="dealer">Дилер</string>
     <string name="hint_name">Ф.И.О.</string>
     <string name="hint_email">Почта</string>
+    <string name="hint_phone">Номер телефона</string>
     <string name="hint_city">Город</string>
     <string name="hint_organization">Организация</string>
     <string name="hint_password">Пароль</string>
@@ -31,4 +32,6 @@
     <string name="add">Добавить</string>
     <string name="count">Кол-во: </string>
     <string name="default_count">1</string>
+    <string name="buy">Заказать</string>
+    <string name="edit_phone">Для продолжения введите номер телефона</string>
 </resources>

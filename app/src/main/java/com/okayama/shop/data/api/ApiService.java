@@ -1,6 +1,7 @@
 package com.okayama.shop.data.api;
 
 import com.okayama.shop.data.models.Category;
+import com.okayama.shop.data.models.OrderElement;
 import com.okayama.shop.data.models.Product;
 
 import java.util.List;
@@ -21,13 +22,16 @@ public interface ApiService {
     String AUTHORIZATION = "web/authorization";
     String GET_CATEGORIES = "web/getCategories";
     String GET_PRODUCTS = "web/getElements/{" + PATH_ID + "}";
+    String POST_ORDER = "web/createOrder";
 
     String ROLE = "role";
     String NAME = "name";
     String EMAIL = "email";
+    String PHONE = "phone";
     String PASSWORD = "password";
     String CITY = "city";
     String ORGANIZATION = "organization";
+    String ELEMENT = "element";
 
     @Multipart
     @POST(REGISTRATION)
@@ -48,4 +52,9 @@ public interface ApiService {
 
     @GET(GET_PRODUCTS)
     Call<List<Product>> getProducts(@Path(PATH_ID) long id);
+
+    @POST(POST_ORDER)
+    Call<Void> createOrder(@Part(EMAIL) RequestBody email,
+                           @Part(PHONE) RequestBody phone,
+                           @Part(ELEMENT) List<OrderElement> elements);
 }

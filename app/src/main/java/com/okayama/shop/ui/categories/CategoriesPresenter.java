@@ -2,10 +2,12 @@ package com.okayama.shop.ui.categories;
 
 import android.support.annotation.NonNull;
 
+import com.okayama.shop.OkayamaApplication;
 import com.okayama.shop.R;
 import com.okayama.shop.base.BaseRepository;
 import com.okayama.shop.data.models.Category;
 import com.okayama.shop.data.repository.RepositoryImpl;
+import com.okayama.shop.util.PreferenceHelper;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class CategoriesPresenter implements CategoriesContract.Presenter {
 
     private CategoriesContract.View view;
     private BaseRepository repository;
+    private PreferenceHelper preferenceHelper;
 
     public void setView(CategoriesContract.View view) {
         this.view = view;
@@ -25,6 +28,7 @@ public class CategoriesPresenter implements CategoriesContract.Presenter {
     @Override
     public void subscribe() {
         repository = new RepositoryImpl();
+        preferenceHelper = OkayamaApplication.getComponent().getPreferenceHelper();
     }
 
     @Override
@@ -50,6 +54,13 @@ public class CategoriesPresenter implements CategoriesContract.Presenter {
 
             }
         });
+    }
+
+    @Override
+    public void logout() {
+        preferenceHelper.setAuthorized(false);
+        preferenceHelper.setPhone(null);
+        preferenceHelper.setEmail(null);
     }
 
     @Override

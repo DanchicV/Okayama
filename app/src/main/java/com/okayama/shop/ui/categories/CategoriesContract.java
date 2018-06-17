@@ -16,5 +16,7 @@ public class CategoriesContract {
     public interface Presenter extends BasePresenter {
 
         void loadCategories();
+
+        void logout();
     }
 }

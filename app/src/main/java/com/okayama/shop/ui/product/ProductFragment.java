@@ -65,7 +65,7 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_products, container, false);
         unbinder = ButterKnife.bind(this, view);
 
         presenter = new ProductPresenter();
@@ -93,7 +93,7 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
                         if (product.getId() == id) {
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
-                                    .add(android.R.id.content, ProductInfoFragment.newInstance(product), ProductInfoFragment.class.getSimpleName())
+                                    .replace(android.R.id.content, ProductInfoFragment.newInstance(product), ProductInfoFragment.class.getSimpleName())
                                     .addToBackStack(ProductInfoFragment.class.getSimpleName())
                                     .commit();
                             break;
@@ -161,7 +161,8 @@ public class ProductFragment extends BaseFragment implements ProductContract.Vie
     }
 
     @OnClick(R.id.basket_fab)
-    public void onBasketFabClicked() {
+    protected void onBasketClicked() {
+        super.onBasketClicked();
     }
 
     @OnClick(R.id.back_button)
